@@ -54,7 +54,9 @@ is_reverted <- function(data){
 #in localise() to localise timestamps, extracting HOD/DOW. IP addresses without
 #identifiable countries are excluded from further analysis.
 geolocate <- function(data){
-  data <- cbind(data,geolookup(data$ip_address, geo_city_path, c("country_iso", "timezone")))
+  data <- cbind(data,
+                geolookup(data$ip_address, geo_city_path, c("country_iso", "timezone")),
+                geolookup(data$ip_address, geo_con_path, c("connection_type")))
   data <- data[!data$country_iso == "Unknown",]
   return(data)
 }

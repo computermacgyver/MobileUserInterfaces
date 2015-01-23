@@ -17,6 +17,7 @@ library(RColorBrewer) #Colour scale definitions.
 
 #Config variables for geolocation
 geo_city_path <- "/usr/local/share/GeoIP/GeoIP2-City.mmdb"
+geo_con_path <- "/usr/local/share/GeoIP/GeoIP2-Connection-Type.mmdb"
 
 #Config variables for automata detection
 bot_usernames <- c("OctraBot","ZiadBot","Happy05dzBot","1999franbot","AlphamaBot","AlphamaBot2","ShitiBot",
