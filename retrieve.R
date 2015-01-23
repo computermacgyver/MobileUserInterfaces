@@ -7,6 +7,7 @@ get_data <- function(){
                           cuc_timestamp AS timestamp,
                           cuc_user_text AS username,
                           cuc_agent AS user_agent,
+                          cuc_namespace AS namespace,
                           ts_tags AS type,
                           cuc_page_id AS page,
                           rev_sha1 AS hash
@@ -27,6 +28,7 @@ get_data <- function(){
   data$timestamp <- as.character(to_posix(data$timestamp))
   data$type[grepl(x = data$type, pattern = "mobile", fixed = TRUE)] <- "mobile"
   data$type[!data$type == "mobile"] <- "desktop"
+  data$type[is.na(data$type)] <- "desktop"
   return(data)
 }
 
