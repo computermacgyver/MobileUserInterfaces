@@ -66,3 +66,11 @@ localise <- function(data){
   return(data)
 }
 
+#Binding function for the preceding retrieval elements
+retrieve <- function(){
+  data <- get_data %>%
+    is_reverted %>%
+    geolocate %>%
+    localise
+  return(data)
+}
