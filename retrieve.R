@@ -36,8 +36,15 @@ get_data <- function(){
 #there is a match between a preceding and following edit's SHA1 hashes on the same page,
 #within 24 hours of each other.
 is_reverted <- function(data){
-  data <- data[,j = detect_reverts(df = .SD, ts_col = "timestamp", hash_col = "hash", page_col = "page"),
-               by = "project"]
+  data <- data[,j = {
+      sdc <- as.data.frame(.SD)
+      timestamps <- sdc$timestamp
+      sdc$timestamp <- as.numeric(as.POSIXlt(sdc$timestamp))
+      out <- detect_reverts(df = sdc, ts_col = "timestamp", hash_col = "hash", page_col = "page",
+                            is_av = TRUE)
+      out$timestamp <- timestamps
+      out
+    }, by = "project"]
   return(data)
 }
 
