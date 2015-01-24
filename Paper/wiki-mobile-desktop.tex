@@ -1,0 +1,351 @@
+\documentclass{sigchi}
+
+\newcommand{\eg}{e.g.,~\ignorespaces}
+\newcommand{\ie}{i.e.,~\ignorespaces}
+\hyphenation{Wiki-pe-dia}
+\hyphenation{Wiki-Me-dia}
+\hyphenation{Me-dia-Wiki}
+
+%Remove before submission
+%\newcommand{\morehere}{\textcolor{red}{XXX}} %Temporary placeholder
+
+
+% %\setcounter{topnumber}{2}
+% \renewcommand{\topfraction}{.8}
+% % \setcounter{\bottomnumber}{1}
+% \renewcommand{\bottomfraction}{.8}
+% % \setcounter{totalnumber}{4}
+% \renewcommand{\textfraction}{.1}
+\renewcommand{\floatpagefraction}{.8}
+% % \setcounter{dbltopnumber}{2}
+% \renewcommand{\dbltopfraction}{.8}
+% \renewcommand{\dblfloatpagefraction}{.8}
+
+
+% Use this command to override the default ACM copyright statement (e.g. for preprints).
+% Consult the conference website for the camera-ready copyright statement.
+
+
+%% EXAMPLE BEGIN -- HOW TO OVERRIDE THE DEFAULT COPYRIGHT STRIP -- (July 22, 2013 - Paul Baumann)
+% \toappear{Permission to make digital or hard copies of all or part of this work for personal or classroom use is 	granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than ACM must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org. \\
+% {\emph{CHI'14}}, April 26--May 1, 2014, Toronto, Canada. \\
+% Copyright \copyright~2014 ACM ISBN/14/04...\$15.00. \\
+% DOI string from ACM form confirmation}
+%% EXAMPLE END -- HOW TO OVERRIDE THE DEFAULT COPYRIGHT STRIP -- (July 22, 2013 - Paul Baumann)
+
+
+% Arabic page numbers for submission.
+%TODO: Camera-ready -- Remove this line to eliminate page numbers for the camera ready copy
+\pagenumbering{arabic}
+
+
+% Load basic packages
+\usepackage{balance}  % to better equalize the last page
+\usepackage{graphics} % for EPS, load graphicx instead
+\usepackage{times}    % comment if you want LaTeX's default font
+\usepackage{url}      % llt: nicely formatted URLs
+\usepackage{booktabs}
+
+% llt: Define a global style for URLs, rather that the default one
+\makeatletter
+\def\url@leostyle{%
+  \@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\bf\ttfamily}}}
+\makeatother
+\urlstyle{leo}
+
+
+% To make various LaTeX processors do the right thing with page size.
+\def\pprw{8.5in}
+\def\pprh{11in}
+\special{papersize=\pprw,\pprh}
+\setlength{\paperwidth}{\pprw}
+\setlength{\paperheight}{\pprh}
+\setlength{\pdfpagewidth}{\pprw}
+\setlength{\pdfpageheight}{\pprh}
+
+% Make sure hyperref comes last of your loaded packages,
+% to give it a fighting chance of not being over-written,
+% since its job is to redefine many LaTeX commands.
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+pdftitle={Mobile User Interfaces and User-Generated Content Platforms},
+%pdfauthor={Oliver Keyes and Scott A. Hale}, %TODO: Camera-ready version uncomment this
+pdfkeywords={Social Media; Mobile Interfaces; Diversity; User Diversity; Geography},
+bookmarksnumbered,
+pdfstartview={FitH},
+colorlinks,
+citecolor=black,
+filecolor=black,
+linkcolor=black,
+urlcolor=black,
+breaklinks=true,
+}
+
+% create a shortcut to typeset table headings
+\newcommand\tabhead[1]{\small\textbf{#1}}
+
+
+% End of preamble. Here it comes the document.
+\begin{document}
+%\title{Big in Japan:\\Combating Systemic Bias Through Mobile Editing}
+\title{Mobile User Interfaces and\\User-Generated Content Platforms}
+
+%Commented out for review
+% \numberofauthors{2}
+% \author{
+%   \alignauthor Oliver Keyes\\
+%     \affaddr{Wikimedia Foundation}\\
+%     \affaddr{149 New Montgomery Street}\\
+%     \affaddr{San Francisco, CA, 94105}\\
+%     \email{okeyes@wikimedia.org}\\
+%   \alignauthor Scott A.~Hale\\
+%     \affaddr{Oxford Internet Institute}\\
+%     \affaddr{University of Oxford}\\
+%     \affaddr{1 St Giles, Oxford OX1 3JS}
+%     \email{scott.hale@oii.ox.ac.uk}\\
+% }
+
+\maketitle
+
+\begin{abstract}
+We study the role of mobile interfaces in driving contribution to user-generated content platforms. Using Wikipedia and Twitter, we find that mobile enables deeper engagement for existing users, with users contributing via mobile and desktop at different times of day. Despite the large growth of mobile phones in regions with fewer broadband users, we find that most mobile contributions come from users located in regions with large numbers of desktop contributions. We discuss design implications and suggest further research to elucidate the sociocultural factors beyond mobile penetration important for diversifying user-generated content platforms' userbases.
+\end{abstract}
+
+\keywords{
+	Social Media; Mobile Interfaces; Diversity; User Diversity; Geography
+}
+
+\category{H.5.3}{Information Interfaces and Presentation (e.g. HCI)}{Group and Organization Interfaces}
+\category{H.5.4}{Information Interfaces and Presentation (e.g. HCI)}{Hypertext/Hypermedia}
+
+
+% See: \url{http://www.acm.org/about/class/1998/}
+% for more information and the full list of ACM classifiers
+% and descriptors.
+% \textcolor{red}{Mandatory section to be included in your
+% final version. On the submission page only the classifiers'
+% letter-number combination will need to be entered.}
+
+\section{Introduction}
+All user-generated content platforms face a key challenge: cultivating and maintaining a userbase that is large enough and engaged enough to support the platform. Beyond this, knowledge platforms like Wikipedia need a userbase with sufficient breadth and diversity to create and maintain the knowledge contained on the platform. This is a particularly pressing concern if a site's goal is to provide access to ``the sum of all human knowledge,'' as has been stated for Wikipedia.%
+\footnote{\url{http://www.theatlantic.com/technology/archive/2011/05/is-wikipedia-a-world-cultural-repository/239274/}}
+
+Mobile interfaces have been seen as one of many ways to address these key challenges of user engagement and userbase diversity. Interactions on mobile phones, tablets, and other devices hold the possibility of increasing user engagement by allowing existing users to contribute in more contexts. Users, for example, might contribute locationally relevant items such as a photo of a landmark while they are nearby, or, users might contribute in moments of ``dead time'' such as waiting for a bus.
+
+At the same time, mobile devices hold the possibility of expanding the breadth of a platform's userbase. The low price of many smartphones and tablets as well as the increasing access to mobile data mean that users without access to a desktop computer could nonetheless become active contributors to a user-generated content platform.
+
+This paper examines the effects of mobile interfaces on the Wikipedia and Twitter userbases and tests the hypotheses that mobile devices increase user engagement and userbase diversity. It finds that engagement is increased with mobile contributions being made at different times of day in comparison to contributions made via desktops. In particular, mobile usage is greatest in the late evening and early morning. The paper examines the second hypothesis of increased userbase diversity in the particular context of geographic diversity, and finds that mobile interfaces have not led to a significant increase in the geographic diversity of either platform.
+
+\section{Related work}
+
+%\subsection{Mobile penetration}
+
+Mobile devices have the potential to transform the way users interact with user-generated content platforms, allowing individuals to interact with platforms anytime and anywhere. Studies show users associate using the Internet on mobile devices with flexibility and ``on-the-go'' use \cite{humphreys2013}. Even before smartphones, Leung and Wei \citeyear{leung2000} studying the use of previous mobile phones found use on buses, cars, and trains or in malls and restaurants was strongly linked to mobility and immediate access gratifications. The flexibility and mobility of mobile devices may allow users to make contributions to user-generated content platforms during periods of the day when they would usually not have access via a desktop or laptop computer.
+The wide adoption of smartphones and other mobile devices in developed countries means that the potential for additional contributions from users while away from desktops is very large: over half of all Americans (58\%) owned a smartphone, and 42\% owned a tablet in 2014 according to survey research \cite{pew2014}.
+%Most smartphone owners carry their device with them all the time and have them ``always on''
+%This may be when users are away from larger form computers (traveling on a train, waiting for a bus, at dinner, etc.) or outside of the traditional times and contexts users traditionally use such devices %domestication
+
+
+%\subsection{Ubiquity}
+%Multiplexing / domestication work re: time, etc.
+%Ubiquity
+%Read Tojib to start
+%See also york20XX, pascoe2000, and okazaki2013 (Ubiquity)
+
+%\subsection{Geographic diversity} %Alternative name: Local bias
+
+At the same time, mobile devices and wireless Internet have brought many people online for the first time---particularly individuals in developing countries and/or of lower socioeconomic statuses. By 2012, the mobile phone was the key entry point for Internet use in Africa \cite{stork2012}. Stork et al.~\cite{stork2012} find mobile devices are a key driver of Internet access in African developing countries because they require fewer ICT skills and financial resources and do not rely on electricity at home.
+
+These additional potential users could have a large positive impact on user-generated content platforms, which both benefit and suffer from the ``localness'' of content. It is perhaps unsurprising that many users contribute local content on photo-sharing sites like Flickr where ``you have to be there'' to to contribute content \cite{hecht2010-localness}. More surprising, however, is that distance ``still matters a great deal on Wikipedia'' even though it employs a ``flat Earth'' model where anyone can contribute content about something located anywhere in the world regardless of the user's location \cite{hecht2010-localness}.
+%This localness can negatively affect the coverage and breadth of content available.
+
+This localness helps capture local knowledge and perspectives (\eg restaurant reviews) on user-generated content platforms, but can also manifest itself as a ``self-focus:'' on Wikipedia, for example, articles about places, people, and events where the language of an edition is spoken are more prominent than those in other regions \cite{hecht2010}.
+Over 74\% of the concepts in Wikipedia have an article in only one language edition, and more than 95\% of concepts appear in six or fewer languages \cite{hecht2010}.
+One way of expanding the coverage of each edition of Wikipedia is encouraging broader contributions from existing users (see \cite{hale2014-wiki} for a discussion of the role of multilingual users), but a second possibility, and the focus of this paper, is cultivating a more geographically diverse userbase.
+Given the greater geographic diversity of mobile Internet users over desktop users, gaining new mobile editors in regions that are currently underrepresented could greatly expand the coverage of user-generated content sites with local content.
+
+The self-focus and localness of content is not unique to Wikipedia. National borders and human languages play a large role in the flow of information on Twitter \cite{hale-chi2014,mocanu2013}. Even within a single language, users post local content to such a degree that Cheng et al.~\cite{cheng2010-twitter-location} were to place over half of all Twitter users in their sample within 100 miles of the users' actual locations based purely on the content of each user's tweets. Userbase diversity is important for Twitter and other platforms as additional users in additional locations will increase the amount of content available to all users as well as benefit secondary uses for data such as tracking the spread of infectious disease (see, example, \cite{culotta2010,signorini2011}).
+
+We next describes the data captured from Wikipedia and Twitter, before turning to present the analysis and results. We then discuss the results and draw conclusions.
+
+\section{Data}
+
+The Wikipedia data covers a period from 1 June to 5 September 2014. To avoid introducing geographic biases as a consequence of language biases, all language versions of Wikipedia and its sister sites (Wikisource, Wikidata, etc.) were used. To avoid biasing towards desktop, only edits from registered users were included as the mobile web interface requires users to have registered. Contributions from automated bots---identified via their registration as bots by the MediaWiki software that powers Wikimedia projects, or due to their user agents or user names matching known automated systems---were also excluded. Finally, edits to non-content namespaces were excluded so that only edits to actual articles are considered.
+
+The IP addresses of editors were geolocated to place each editor within a country and timezone, and editors in unknown locations\slash{}timezones were discarded, leaving 10,810,345 edits from 310,563 distinct editors, covering 211 unique countries.
+Users were assigned to the country from which the plurality of their contributions took place. Users without a single country providing a plurality of edits were excluded from the analysis of distinct editors.
+%TODO: We might but the number of editors excluded for this reason here (I've had a bad past experience)
+
+%should we I link through to the GeoIP software I used to extract values from IP addresses, along with the tzdata library?
+%Yeah, let's just footnote it --SAH
+
+To make the determination of whether an edit was \emph{mobile} or \emph{desktop}, we looked at the site through which the contribution was made, grouping mobile web and mobile app edits as mobile and all other contributions as desktop.
+%To determine whether a user was mobile,desktop or mixed, we examined the contributions each user made in the dataset and determined whether they had exclusively contributed via one pathway in the 90 day period (mobile or desktop) or from both (mixed).
+MediaWiki, by default, stores timestamps in Coordinated Universal Time (UTC). By extracting the appropriate timezones for users' IP addresses, however, we were able to localize those timestamps, discovering how users edited relative to their timezones.%
+%TODO: Footnote the tzdata library here?
+
+The Twitter data analyzed comes from the Twitter sample stream with ``spritzer'' access, which gives a 1\% sample of all tweets. Tweets were collected from 1 April to 30 April 2014. The time each tweet was sent was extracted from the tweet along with the ``source'' from which the tweet was sent.
+
+Twitter supplies the time of each tweet in UTC at offset zero. Each Twitter user can set a local timezone in their user preferences that is then used to display dates and times on the Twitter website and in the official applications. Previous research has found that while most users do choose a timezone with the correct UTC offset, a sizable percentage do not choose between timezones of the same UTC offset correctly \cite{graham2014-twitter}. Therefore, this paper uses each user's UTC offset as a proxy to the user's location. This gives a good indication of the user's east--west position (longitude), but does not give any indication of the user's north--south (latitude).
+
+%TODO: Add number of unique users ... ``xxxx distinct users...''
+A total of 133,418,703 tweets were captured in April 2014. Tweets are sent on the Twitter platform with a large number of different applications, and each application is expected to set the ``source'' field with an HTML string indicating the application used to send the tweet. The most common of these sources were the Twitter native app for iPhone and the native app from Android. Looking at the most common sources, we select the tweets sent from the Twitter (desktop) website, the tweets sent from the Twitter mobile website, and the tweets from the official Twitter mobile apps for iPhone, Android, BlackBerry, iPad, and Windows Phone for comparison.
+We do not analyze tweets sent from third-party applications (\eg Facebook), tweets sent from applications that could be either desktop or mobile (\eg TweetDeck), nor tweets sent from the long-tail of other source strings in the sample. To simply our analysis, we assume those tweets sent from the Twitter website were sent from desktops, while those tweets sent from the mobile website or apps were sent from mobile devices.
+
+% \begin{table}
+% \begin{center}
+% 
+% \begin{tabular}{l r l}
+% \toprule
+% Source	&	Number of Tweets	&	Classification\\
+% \midrule
+% Twitter for iPhone	&	39,375,636	&	Mobile app\\
+% Twitter for Android	&	28,080,708	&	Mobile app\\
+% (Desktop) website	&	19,628,433	&	Mobile app\\
+% Twitter for BlackBerry&	3,934,671	&	Mobile app\\
+% Twitter for iPad	&	3,039,910	& 	Mobile app\\
+% TweetDeck		&	3,002,721	& 	(not analyzed)\\
+% twittbot.net		&	2,188,883	& 	(not analyzed)\\
+% Facebook		&	1,885,210	& 	(not analyzed)\\
+% Mobile website	&	2,118,712	& 	Mobile website\\
+% twitterfeed		&	1,092,182	& 	(not analyzed)\\
+% Instagram		&	1,001,880	& 	(not analyzed)\\
+% Tweet Button		&	923,891	& 	(not analyzed)\\
+% Twitter for Windows Phone & 822,288	& 	Mobile app\\
+% \bottomrule
+% \end{tabular}
+% \caption{Top tweet sources in the sample, and the researcher categorization of the sources for this article.}
+% \label{tbl:tweetSources}
+% \end{center}
+% \end{table}
+
+
+% \begin{figure}
+% 	\begin{center}
+% 		\includegraphics[page=3, width=\columnwidth]{figs/Big_in_Japan_Combating_Systemic_Bias_Through_Mobile_Editing}
+% 		\caption{A dinosaur. Every good paper should have at least one.}
+% 		\label{fig:dino}
+% 	\end{center}
+% \end{figure}
+
+%WikiData query
+%http://tools.wmflabs.org/wikidata-todo/autolist.html?props=298,297&q=CLAIM%5B298%5D%20AND%20CLAIM%5B31%5D
+
+\section{Findings}
+\subsection{Time of day}
+
+% \begin{figure}
+% 	\begin{center}
+% 		\includegraphics[width=\columnwidth]{figs/circ_plot}
+% 		\caption{Wikipedia Edits by hour of the day grouped across mobile and desktop.}
+% 		\label{fig:wiki_time_of_day}
+% 	\end{center}
+% \end{figure}
+% 
+% \begin{figure}
+% 	\begin{center}
+% 		\includegraphics[width=\columnwidth]{figs/twitter_time_of_day_combined}
+% 		\caption{Tweets by hour of the day grouped across the mobile website, mobile apps, and the desktop website.}
+% 		\label{fig:tw_time_of_day}
+% 	\end{center}
+% \end{figure}
+
+\begin{figure*}
+	\begin{center}
+		\includegraphics[width=\textwidth]{figs/combined_time_of_day_horizontal}
+		\caption{Edits (left) and tweets (right) by hour of the day grouped across mobile and desktop.}
+		\label{fig:time_of_day}
+	\end{center}
+\end{figure*}
+
+The data shows that users of Wikipedia and Twitter make contributions at different times of day on mobile and desktop devices (Figure \ref{fig:time_of_day}). More Wikipedia edits were made on desktop computers during in the daytime (7am to 7pm), while more edits were made on mobile outside of this time.
+
+The mobile apps and mobile website on Twitter are similarly most active in the morning until about 10am, when desktop traffic becomes more prominent. Desktop traffic peaks slightly earlier than mobile traffic on Twitter in the evenings. In contrast to Wikipedia, however, the percentage of desktop and mobile traffic remain close together through the late night and very early morning.
+
+It is important to note that in both these figures, we are comparing the distribution of traffic for mobile to the distribution of traffic for desktop. That is, each line sums to 100 percent and a point shows, for example, that 6.7\% of all Wikipedia edits from mobile devices occurred in the local hour of 10pm. In terms of raw volume, more Wikipedia edits are performed via desktops than mobiles throughout the day, while more tweets are sent by mobile than desktop throughout the day. 
+
+\subsection{Geographic diversity}
+\begin{figure*}
+	\begin{center}
+	%TODO: Note the count scales are incorrect (reversed)
+		%\includegraphics[width=\columnwidth]{figs/global_editors_desktop}%
+		%\includegraphics[width=\columnwidth]{figs/global_editors_mobile}%
+		\includegraphics[width=\textwidth]{figs/global_editors_combined}%
+		\caption{Geolocation of Wikipedia editors on desktop (left) and mobile (right) devices.}
+		\label{fig:wiki_geo}
+	\end{center}
+\end{figure*}
+
+% \begin{figure}
+% 	\begin{center}
+% 		%\includegraphics[width=\columnwidth]{figs/twitter_utc_offset}%
+% 		\includegraphics[width=\columnwidth]{figs/twitter_utc_stacked}%
+% 		\caption{UTC offset Twitter tweets on desktop, mobile apps, and the mobile website.}
+% 		\label{fig:tw_geo}
+% 	\end{center}
+% \end{figure}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.7\columnwidth]{figs/twitter_utc_scatter}%
+		\caption{Scatter plot of UTC offsets: the rank of the percent of all mobile traffic compared to the rank of the percent of all desktop traffic for each offset.}
+		\label{fig:tw_scatter}
+	\end{center}
+\end{figure}
+
+Wikipedia and Twitter are global platforms with users in nearly all countries and timezones (Figure \ref{fig:wiki_geo}, Twitter not shown). Mobile penetration among Wikipedia editors is widespread with mobile editors located in 184 countries (median 33 editors, mean 287 editors per country).
+
+%TODO: Report correlation of country rankings across mobile and desktop and any outliers (or percentage of all edits on mobile/desktop in countries on scatter plot)?
+
+Nonetheless, the raw distributions of users on desktop and mobile are very similar, with the largest numbers located in North America. The countries with the highest numbers of Wikipedia desktop editors are also the countries with the highest number of mobile editors (correlation 0.94).
+Figure \ref{fig:tw_scatter} compares the rank of each UTC offset for Twitter mobile traffic against the rank of the offset for desktop traffic, showing a similar pattern (correlation 0.98). The top offsets for high mobile traffic (UTC-5, UTC-3, UTC+9, and UTC+7) are also among the top offsets for desktop traffic. Mobile use is slightly lower than desktop use in UTC+2 and UTC+3 (central and eastern Europe), while mobile use is slightly higher than desktop use in UTC+9 (Japan and Korea), UTC-5 (which includes US\slash{}Canada Central Time as well as Mexico City, Quito, and Bogota), and UTC-7 (US\slash{}Canada Pacific Time).
+
+%Desktop traffic is highest in UTC-3, accounting for 23\% of all tweets made via the desktop website. This UTC offset include Brazil, Argentina, and eastern coast of Canada (but not the US). Previous research has studied the high number of Internet cafes and their frequent use in everyday life in Brazil \cite{MISSING}, and it might be that Brazil is driving the desktop use for this UTC offset.
+
+The country-level granularity of the Wikipedia data allows us to normalize the number of editors using mobile and desktop by the total number of fixed broadband connections and the number of mobile subscribers in each country.%
+\footnote{We use World Bank data available at \url{http://data.worldbank.org/indicator}, and calculate the number of broadband connections per country as \emph{IT.\allowbreak{}NET.\allowbreak{}BBND.P2}$/100\times$\emph{SP.\allowbreak{}POP.\allowbreak{}TOTL} and the number of mobile subscribers per country as \emph{IT.\allowbreak{}CEL.\allowbreak{}SETS.P2}$/100\times$\emph{SP.\allowbreak{}POP.\allowbreak{}TOTL}.}
+We find that desktop editing is tied closely to Internet penetration: the number of desktop editors is highly correlated with the number of broadband connections in each country (0.92). In contrast, however, the number of mobile editors has only a 0.57 correlation with the number of mobile subscribers in each country. Thus, beyond mobile Internet penetration, a deeper understanding of the sociocultural issues behind mobile contributions on user-generated content sites is needed.
+
+%Therefore, while desktop editing is tied closer to Internet penetration, the probability of people choosing to edit via mobile is likely more closely tied to deeper sociocultural issues than to mobile Internet availability---a topic needing much further research.
+
+
+%Hmn. How about "the lack of a clear relationship between mobile and desktop penetration, and the probability of people choosing to edit, indicates that contributions to open projects, while largely biased towards certain geographic areas and methods of access, are . We encourage both other researchers and the engineering teams working on the projects we have studied to take this into account, and to do their own work in discerning what those sociocultural issues might be".
+
+%Doing this, a more complicated picture emerges (Figure \ref{fig:wiki_scatter}), with a correlation of only 0.09 between the two measures. The countries with the largest positive change in rank between normalized mobile and desktop penetration are South Korea (KR), Puerto Rico (PR), Aruba (AW), Bahrain (BH), and Lebanon (LB). Meanwhile, Nigeria (NG), Mali (ML), Afganistan (AF), Cameroon (CM), and Kenya (KE), which all had relatively high numbers of desktop editors taking into account the number of fixed broadband connections in each country, have relatively low numbers of mobile editors given the number of mobile subscribers in each country.
+
+% \begin{figure}
+% 	\begin{center}
+% 		\includegraphics[width=0.7\columnwidth]{figs/wiki_normalized_scatter}%
+% 		\caption{Scatter plot of countries: the rank of the mobile penetration among a country's mobile subscribers compared to the rank of the desktop penetration among a country's fixed broadband users.}
+% 		\label{fig:wiki_scatter}
+% 	\end{center}
+% \end{figure}
+
+% \subsection{Topics edited}
+% \begin{figure}
+% 	\begin{center}
+% 		\includegraphics[page=16, width=\columnwidth]{figs/Big_in_Japan_Combating_Systemic_Bias_Through_Mobile_Editing}
+% 		\caption{Top themes of articles edits on mobile and desktop (English edition of Wikipedia only).}
+% 		\label{fig:themes}
+% 	\end{center}
+% \end{figure}
+% 
+% Finally, we ask if Similar across mobile and desktop.
+
+
+\section{Discussions}
+
+We find that implications of mobile penetration on user engagement and diversity for user-generated content platforms are mixed. Mobile devices allow users of user-generated content platforms to contribute during additional times of the day (primarily during the morning and the late evening). In contrast, however, mobile has not resulted in a significant shift in the geographic diversity of either Wikipedia or Twitter's userbase at this time. The mobile sites for both platforms are used most predominantly in the areas where desktop penetration is also high.
+
+Mobile interfaces are important for user volume. The majority of all Twitter users sent messages via mobile devices. Wikipedia editors are still mostly on desktops (with the single exception of Kuwait, every country had more desktop editors than mobile editors), but a good mobile interface will be important to keep users engaged as they spend more time on mobile devices.
+
+%the large difference in normalized ranks of countries show mobile is very important in many countries (e.g., South Korea). The normalized data also reveals several countries where mobile editing is not keeping pace with desktop editing. Sociocultural factors (prices of mobile data, contribution motivations, etc.) in these countries should be examined in further work.
+
+While contributing encyclopedic content will always differ in nature to contributing a social message, the engineering teams at the Wikimedia Foundation and the volunteer community contribution to the software behind Wikipedia are working hard to streamline the mobile editing experience as well as develop more specific workflows for users on mobile devices \cite{sneller2014}. One example idea, is that users could be asked to indicate the best photo from an auto-generated list of candidate photos for an article that has no images \cite{sneller2014}. The mobile interface at present, however, is rudimentary with users editing the raw markup of each page. Improvements may expand the geographic breadth of Wikipedia's userbase in the future, but the data from Twitter---for which most traffic is already mobile---suggests larger sociocultural factors are at play. Having a good mobile interface alone is not enough to solicit a large number of contributions from users in new geographic regions.
+
+
+
+
+\bibliographystyle{acm-sigchi}
+\bibliography{library}
+\end{document}
