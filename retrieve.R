@@ -75,11 +75,30 @@ localise <- function(data){
   return(data)
 }
 
+#Hash usernames, with a stable but unknown salt; this allows us to pass
+#usernames forward as unique tokens, without actually passing usernames forward.
+hash_users <- function(data){
+  salt_val <- runif(1)
+  data$username <- md5(paste0(data$username,salt_val))
+  return(data)
+}
+
+#Strips unnecessary fields and converts timestamps to numeric values,
+#allowing for session reconstruction during the "analysis" portion of the
+#project.
+clean <- function(data){
+  data <- data[,c("ip_address","user_agent","page") := NULL,]
+  data$timestamp <- as.numeric(as.POSIXlt(data$timestamp))
+  return(data)
+}
+
 #Binding function for the preceding retrieval elements
 retrieve <- function(){
   data <- get_data %>%
     is_reverted %>%
     geolocate %>%
-    localise
+    localise %>%
+    hash_users %>%
+    clean  
   return(data)
 }

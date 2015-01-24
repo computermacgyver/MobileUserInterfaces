@@ -1,11 +1,12 @@
 #General libraries
 library(reconstructr) #Session reconstruction
-library(WMUtils) #global querying
-library(data.table) #easy groupwise manipulation
-library(lubridate) #date/time handling
-library(rgeoip) #geolocation
+library(WMUtils) #Global querying
+library(data.table) #Easy groupwise manipulation
+library(lubridate) #Date/time handling
+library(rgeoip) #Geolocation
 library(magrittr) #Piping
 library(mwutils) #Timestamp handling and revert detection.
+library(openssl) #Username hashing
 
 #Plotting libraries
 library(ggplot2) #Find me a researcher who has not used this and you will have found me a researcher who has not lived.
