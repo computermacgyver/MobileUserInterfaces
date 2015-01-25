@@ -10,11 +10,14 @@ get_data <- function(){
                           cuc_namespace AS namespace,
                           ts_tags AS type,
                           cuc_page_id AS page,
-                          rev_sha1 AS hash
+                          rev_sha1 AS hash,
+                          user_registration AS registration
                         FROM cu_changes LEFT JOIN tag_summary
                           ON cuc_this_oldid = ts_rev_id
                         INNER JOIN revision
                           ON cuc_this_oldid = rev_id
+                        INNER JOIN user
+                          ON cuc_user = user_id
                         WHERE cuc_type IN(0,1)
                           AND cuc_user > 0
                           AND cuc_user NOT IN
