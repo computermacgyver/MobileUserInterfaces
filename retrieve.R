@@ -88,12 +88,13 @@ categorise_users <- function(data){
     sdc <- copy(.SD)
     unique_types <- unique(type)
     if(length(unique_types) == 1){
-      sdc$type <- unique_types[1]
+      sdc$user_type <- unique_types[1]
     } else {
-      sdc$type <- "mixed"
+      sdc$user_type <- "mixed"
     }
     sdc
   }, by = "username"]
+  return(data)
 }
 
 #Hash usernames, with a stable but unknown salt; this allows us to pass
@@ -108,7 +109,7 @@ hash_users <- function(data){
 #allowing for session reconstruction during the "analysis" portion of the
 #project.
 clean <- function(data){
-  data <- data[,c("ip_address","user_agent","page") := NULL,]
+  data <- data[,c("ip_address","user_agent","page","registration","hash","timezone") := NULL,]
   data$timestamp <- as.numeric(as.POSIXlt(data$timestamp))
   return(data)
 }
