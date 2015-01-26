@@ -70,12 +70,30 @@ geolocate <- function(data){
 localise <- function(data){
   data <- data[,j = {
     sdc <- copy(.SD)
-    localised_stamps <- with_tz(as.POSIXlt(sdc$timestamp), timezone)
+    localised_stamps <- with_tz(as.POSIXlt(sdc$timestamp), sdc$timezone[1])
     sdc$hour <- hour(localised_stamps)
     sdc$day <- as.character(x = wday(x = localised_stamps, label = TRUE))
     sdc
   }, by = "timezone"]
   return(data)
+}
+
+#Categorises users, identifying (respectively) new users, and primarily-mobile or
+#primarily-desktop users
+categorise_users <- function(data){
+  is_new <- logical(nrow(data))
+  is_new[data$registration >= min(to_mw(data$timestamp))] <- TRUE
+  data$is_new <- is_new
+  data <- data[,j = {
+    sdc <- copy(.SD)
+    unique_types <- unique(type)
+    if(length(unique_types) == 1){
+      sdc$type <- unique_types[1]
+    } else {
+      sdc$type <- "mixed"
+    }
+    sdc
+  }, by = "username"]
 }
 
 #Hash usernames, with a stable but unknown salt; this allows us to pass
@@ -101,6 +119,7 @@ retrieve <- function(){
     is_reverted %>%
     geolocate %>%
     localise %>%
+    categorise_users %>%
     hash_users %>%
     clean  
   return(data)
