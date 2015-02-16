@@ -116,7 +116,7 @@ clean <- function(data){
 
 #Binding function for the preceding retrieval elements
 retrieve <- function(){
-  data <- get_data %>%
+  data <- get_data() %>%
     is_reverted %>%
     geolocate %>%
     localise %>%
