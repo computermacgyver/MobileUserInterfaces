@@ -29,6 +29,12 @@ bot_usernames <- c("OctraBot","ZiadBot","Happy05dzBot","1999franbot","AlphamaBot
                    "Fikarumsrobot","H2Bot","BanwolBot","ThitxongkhoiAWB","Rotlink","CommonsDelinker")
 bot_agents <- "((Py(thon)?)?wiki(pedia)?bot|MediaWiki|Wiki\\.java|libcurl|(Synch|Abbott|Wartungslisten|Octra)bot|libwww-perl)"
 
+#World bank config
+worldbank_files <- c("http://api.worldbank.org/v2/en/indicator/it.cel.sets.p2?downloadformat=csv",
+                     "http://api.worldbank.org/v2/en/indicator/it.net.bbnd.p2?downloadformat=csv",
+                     "http://api.worldbank.org/v2/en/indicator/it.net.user.p2?downloadformat=csv",
+                     "http://api.worldbank.org/v2/en/indicator/sp.pop.totl?downloadformat=csv")
+
 #Options
 options(scipen = 500)
 options(q = "no")
