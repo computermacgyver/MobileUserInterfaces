@@ -70,9 +70,9 @@ geolocate <- function(data){
 localise <- function(data){
   data <- data[,j = {
     sdc <- copy(.SD)
-    localised_stamps <- with_tz(as.POSIXlt(sdc$timestamp), sdc$timezone[1])
-    sdc$hour <- hour(localised_stamps)
-    sdc$day <- as.character(x = wday(x = localised_stamps, label = TRUE))
+    localised_stamps <- with_tz(as.POSIXlt(sdc$timestamp, tz = "UTC"), sdc$timezone[1])
+    sdc$hour <- lubridate::hour(localised_stamps)
+    sdc$day <- as.character(x = lubridate::wday(x = localised_stamps, label = TRUE))
     sdc
   }, by = "timezone"]
   return(data)
