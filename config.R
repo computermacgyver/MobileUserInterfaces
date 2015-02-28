@@ -26,7 +26,7 @@ geo_con_path <- "/usr/local/share/GeoIP/GeoIP2-Connection-Type.mmdb"
 bot_usernames <- c("OctraBot","ZiadBot","Happy05dzBot","1999franbot","AlphamaBot","AlphamaBot2","ShitiBot",
                    "EmausBot","Hoangdat bot","AlphamaBot4","XLinkBot","BryanBot","HangsnaBot2","AVdiscuBOT","JBot",
                    "StubCreationBot","Yjs5497 bot","IanraBot","MerlBot","RotlinkBot","Dinobot-br","Jembot","DvtBot",
-                   "Fikarumsrobot","H2Bot","BanwolBot","ThitxongkhoiAWB","Rotlink","CommonsDelinker")
+                   "Fikarumsrobot","H2Bot","BanwolBot","ThitxongkhoiAWB","Rotlink","CommonsDelinker", "Ops Monitor (WMF)")
 bot_agents <- "((Py(thon)?)?wiki(pedia)?bot|MediaWiki|Wiki\\.java|libcurl|(Synch|Abbott|Wartungslisten|Octra)bot|libwww-perl)"
 
 #Options
