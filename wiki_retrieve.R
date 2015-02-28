@@ -60,7 +60,7 @@ geolocate <- function(data){
   data <- cbind(data,
                 geolookup(data$ip_address, geo_city_path, c("country_iso", "timezone")),
                 geolookup(data$ip_address, geo_con_path, c("connection_type")))
-  data <- data[!data$country_iso == "Unknown",]
+  data <- data[!data$country_iso == "Unknown" & !data$timezone == "Unknown",]
   return(data)
 }
 
@@ -68,13 +68,21 @@ geolocate <- function(data){
 #the IP address, returning the hour of the day and day of the week of the data's
 #timestamp field (and the data itself, obviously.)
 localise <- function(data){
-  data <- data[,j = {
-    sdc <- copy(.SD)
-    localised_stamps <- with_tz(as.POSIXlt(sdc$timestamp, tz = "UTC"), sdc$timezone[1])
-    sdc$hour <- lubridate::hour(localised_stamps)
-    sdc$day <- as.character(x = lubridate::wday(x = localised_stamps, label = TRUE))
-    sdc
-  }, by = "timezone"]
+  data$rn <- seq(1,nrow(data),1)
+  pairs <- as.data.table(ddply(.data = data,
+                               .variables = "timezone",
+                               .fun = function(x){
+                                 tses <- as.character(with_tz(as.POSIXlt(x$timestamp,"UTC"), x$timezone[1]))
+                                 result <- data.frame(timestamps = tses,
+                                                      rn = x$rn,
+                                                      stringsAsFactors = FALSE)
+                                 return(result)
+                               }))
+  localised_timestamps <- as.POSIXlt(pairs$timestamps, tz = "UTC")
+  pairs$day <- as.character(wday(localised_timestamps, label = TRUE))
+  pairs$hour <- hour(localised_timestamps)
+  pairs <- pairs[,c("timezone","timestamps") :=NULL]
+  data <- merge(data, pairs, by = "rn", all.x = TRUE)
   return(data)
 }
 
