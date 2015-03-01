@@ -23,6 +23,27 @@ circadian_variation <- function(data){
 #connectivity rate of people in a given country.
 geographic_distribution <- function(data){
   
+  dt_geo_plot <- function(dt, title){
+    setnames(dt, 1:2, c("country","count"))
+    cdm <- joinCountryData2Map(dt, joinCode="ISO2", nameJoinColumn="country", suggestForFailedCodes=TRUE)
+    values <- as.data.frame(cdm[,c("count", "country")])
+    names(values) <- c("count", "id")
+    values <- unique(values)
+    fortified_polygons <- fortify(cdm, region = "country")
+    ggplot(values) + 
+      geom_map(aes(fill = count, map_id = id),
+               map = fortified_polygons) +
+      expand_limits(x = fortified_polygons$long,
+                    y = fortified_polygons$lat) +
+      coord_equal() + 
+      coord_map(projection="mollweide") +
+      labs(title = title,
+           x = "Longitude",
+           y = "Latitude") +
+      scale_fill_gradientn(colours=brewer.pal(9, "Blues")[3:8])
+  }
+  
+  
 }
 
 

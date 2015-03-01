@@ -19,6 +19,7 @@ library(rgeos) #Mapping dependency
 library(rworldmap) #SpatialPolygonDataFrame creation.
 library(RColorBrewer) #Colour scale definitions.
 library(gridExtra) #Multi-mapping
+library(mapproj) #mollweide projection
 
 #Config variables for geolocation
 geo_city_path <- "/usr/local/share/GeoIP/GeoIP2-City.mmdb"
