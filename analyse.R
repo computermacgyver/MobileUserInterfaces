@@ -3,9 +3,7 @@
 #has shown that this pattern varies depending on platform. If we can replicate that
 #it should go in.
 circadian_variation <- function(data){
-  dataset <- data[!data$day %in% c("Sat","Sun"),]
-  dataset <- dataset[,j=.SD[sample(1:.N,100000),], by = "type"]
-  dataset <- dataset[,j=list(edits = .N), by = c("type","hour")]
+  dataset <- data[,j=list(edits = .N), by = c("type","hour")]
   dataset <- dataset[,j=list(edits = edits/sum(edits), hour = hour), by = "type"]
   ggsave(filename = file.path(getwd(),"Paper","Figures","circadian_variation.svg"),
          plot = ggplot(data = dataset, aes(hour, edits, color=as.factor(type))) +

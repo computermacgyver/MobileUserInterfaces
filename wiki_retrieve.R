@@ -117,7 +117,7 @@ hash_users <- function(data){
 #allowing for session reconstruction during the "analysis" portion of the
 #project.
 clean <- function(data){
-  data <- data[,c("ip_address","user_agent","page","registration","hash","timezone") := NULL,]
+  data <- data[,c("ip_address","user_agent","page","registration","hash","timezone","rn") := NULL,]
   data$timestamp <- as.numeric(as.POSIXlt(data$timestamp))
   return(data)
 }
