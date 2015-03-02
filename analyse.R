@@ -14,6 +14,18 @@ circadian_variation <- function(data){
     theme_bw())
   write.table(dataset, file = file.path(getwd(),"Paper","Datasets","circadian_variation.tsv"),
               quote = FALSE, sep = "\t", row.names = FALSE)
+  
+  dataset <- data[data$is_new == TRUE, j=list(edits = .N), by = c("type","hour")]
+  dataset <- dataset[,j=list(edits = edits/sum(edits), hour = hour), by = "type"]
+  ggsave(filename = file.path(getwd(),"Paper","Figures","new_user_circadian_variation.svg"),
+         plot = ggplot(data = dataset, aes(hour, edits, color=as.factor(type))) +
+           geom_line(aes(group = type, colour = type)) +
+           scale_y_continuous("Percent of requests", labels = percent) +
+           scale_x_continuous("Local hour of the day based on geocoded IP address") +
+           scale_color_brewer("Traffic source", type = "qual", palette = 7) +
+           theme_bw())
+  write.table(dataset, file = file.path(getwd(),"Paper","Datasets","new_user_circadian_variation.tsv"),
+              quote = FALSE, sep = "\t", row.names = FALSE)
   return(data[,c("hour","day") := NULL,])
 }
 
@@ -24,6 +36,7 @@ circadian_variation <- function(data){
 geographic_distribution <- function(data){
   
   dt_geo_plot <- function(dt, title){
+    suppressMessages({
     setnames(dt, 1:2, c("country","count"))
     cdm <- joinCountryData2Map(dt, joinCode="ISO2", nameJoinColumn="country", suggestForFailedCodes=TRUE)
     values <- as.data.frame(cdm[,c("count", "country")])
