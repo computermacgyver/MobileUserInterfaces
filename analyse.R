@@ -86,16 +86,14 @@ session_distribution <- function(data){
   }
 
   sess_dataset <- data[data$is_new == TRUE,]
-  mobile_session_sample <- sample(reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "mobile"],
-                                                             sess_dataset$username[sess_dataset$type == "mobile"])),
-                                  size = 10000)
-  desktop_session_sample <- sample(reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "desktop"],
-                                                              sess_dataset$username[sess_dataset$type == "desktop"])),
-                                   size = 10000)
+  mobile_session_sample <- reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "mobile"],
+                                                      sess_dataset$username[sess_dataset$type == "mobile"]))
+  desktop_session_sample <- reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "desktop"],
+                                                       sess_dataset$username[sess_dataset$type == "desktop"]))
   
   session_length <- metric_to_df(desk_set = session_length(desktop_session_sample),
                                  mob_set = session_length(mobile_session_sample))
-  
+  session_length <- session_length[session_length$value > -1,]
   event_count <- metric_to_df(desk_set = session_events(desktop_session_sample),
                               mob_set = session_events(mobile_session_sample))
 
@@ -143,11 +141,17 @@ revert_rate <- function(data){
 connection_type <- function(data){
   
 }
+
+world_bank_ranking <- function(wiki_data, wb_data){
+  merged_set <- merge(x = wb_data, y = wiki_data, all.x = TRUE, by = "country_iso")
+}
 analyse <- function(data){
   data <- %<>% circadian_variation() %>%
     geographic_distribution %>%
     session_distribution %>%
     revert_rate %>%
     connection_type
-    
+  
+  #Ranking
+  world_bank_ranking(data, world_bank_retrieve())
 }

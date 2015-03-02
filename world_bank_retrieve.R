@@ -36,6 +36,7 @@ get_data <- function(){
                                                           "population"),
                             by = c("country_name","country_code"))
   results <- merge(mobile_and_broadband, internet_and_pop, by = c("country_name","country_code"))
+  setnames(results, "country_code", "country_iso")
   return(results)
 }
 
@@ -52,12 +53,20 @@ clean_data <- function(data){
   return(data)
 }
 
+#Grabs the ISO-2 country code and replaces the relevant ISO-3 with it.
+#This is necessary because rgeoip outputs an ISO-2, and the World Bank an ISO-3,
+#making merging...a pain.
+get_iso2 <- function(data){
+  
+}
 #Wrapper function for all of the above; retrieves raw data, parses and scrubs it,
 #generates second-order data, writes it to file and then passes it on.
 world_bank_retrieve <- function(){
   results <- get_data() %>%
-    clean_data
+    clean_data %>%
+    get_iso2
+  
   write.table(results, file = file.path(getwd(),"Paper", "Datasets", "world_bank_data.tsv"),
               row.names = FALSE, quote = TRUE, sep = "\t")
-  return(results)
+  return(as.data.table(results))
 }
