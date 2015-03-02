@@ -54,23 +54,51 @@ geographic_distribution <- function(data){
            x = "Longitude",
            y = "Latitude") +
       scale_fill_gradientn(colours=brewer.pal(9, "Blues")[3:8])
+    })
   }
   
+  svg(filename = file.path(getwd(),"Paper","Figures","edit_map.svg"), width = par("din")[1], height = par("din")[2])
+  grid.arrange(dt_geo_plot(data[data$type == "desktop" , j=list(log10_edits = log10(.N)), by = "country_iso"],
+                           "Desktop"),
+               dt_geo_plot(data[data$type == "mobile" , j=list(log10_edits = log10(.N)), by = "country_iso"],
+                           "Mobile"), ncol = 2)
+  dev.off()
   
+  svg(filename = file.path(getwd(),"Paper","Figures","editor_map.svg"), width = par("din")[1], height = par("din")[2])
+  grid.arrange(dt_geo_plot(data[data$user_type %in% c("desktop","mixed") , j=list(editors = log10(length(unique(username)))), by = "country_iso"],
+                           "Desktop & Mixed-Method"),
+               dt_geo_plot(data[data$user_type %in% c("mobile","mixed"), j=list(editors = log10(length(unique(username))))
+                                , by = "country_iso"],
+                           "Mobile & Mixed-Method"), ncol = 2)
+  dev.off()
+  return(data)
 }
 
-
+#Look for variation in common session metrics (session length,
+#number of events) between classes of edit. Use reconstructr,
+#which implements the session reconstruction approach pioneered
+#by Halfaker et al.
 session_distribution <- function(data){
-  stat_fun <- function(data, indices){
-    data <- data[indices]
-    return(sum(data)/length(data))
+  
+  metric_to_df <- function(desk_set, mob_set){
+    return(rbind(data.frame(type = "desktop", value = unlist(desk_set), stringsAsFactors = FALSE),
+                 data.frame(type = "mobile", value = unlist(mob_set), stringsAsFactors = FALSE)))
   }
+
   sess_dataset <- data[data$is_new == TRUE,]
-  mobile_sessions <- reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "mobile"],
-                                                sess_dataset$username[sess_dataset$type == "mobile"]))
-  test <- data[, j = {
-    by_user_events <- split(.SD$timestamp,.SD$username)
-  }]
+  mobile_session_sample <- sample(reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "mobile"],
+                                                             sess_dataset$username[sess_dataset$type == "mobile"])),
+                                  size = 10000)
+  desktop_session_sample <- sample(reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "desktop"],
+                                                              sess_dataset$username[sess_dataset$type == "desktop"])),
+                                   size = 10000)
+  
+  session_length <- metric_to_df(desk_set = session_length(desktop_session_sample),
+                                 mob_set = session_length(mobile_session_sample))
+  
+  event_count <- metric_to_df(desk_set = session_events(desktop_session_sample),
+                              mob_set = session_events(mobile_session_sample))
+
 }
 
 #Having calculated /whether/ each edit was reverted with is_reverted,
