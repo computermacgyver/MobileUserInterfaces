@@ -76,4 +76,5 @@ world_bank_retrieve <- function(){
   
   write.table(results, file = file.path(getwd(),"Paper", "Datasets", "world_bank_data.tsv"),
               row.names = FALSE, quote = TRUE, sep = "\t")
+  return(results)
 }
