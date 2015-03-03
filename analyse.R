@@ -143,7 +143,14 @@ connection_type <- function(data){
 }
 
 world_bank_ranking <- function(wiki_data, wb_data){
+  wiki_data <- wiki_data[, j = list(editors = length(unique(username))), by = c("country_iso","user_type"),]
   merged_set <- merge(x = wb_data, y = wiki_data, all.x = TRUE, by = "country_iso")
+  merged_set <- merged_set[!is.na(editors) & !is.na(broadband_population) & !is.na(mobile_population),]
+  merged_set <- merged_set[,j = {
+    to_return <- data.table(desktop_penetration = (sum(editors[user_type %in% c("mixed","desktop")])/broadband_population[1])*1000000,
+                            mobile_penetration = (sum(editors[user_type %in% c("mixed","mobile")])/mobile_population[1])*1000000)
+    to_return
+  }, by = "country_iso"]
 }
 analyse <- function(data){
   data <- %<>% circadian_variation() %>%
