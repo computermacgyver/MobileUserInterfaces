@@ -152,23 +152,68 @@ world_bank_ranking <- function(wiki_data, wb_data){
   merged_set <- merge(x = wb_data, y = wiki_data, all.x = TRUE, by = "country_iso")
   merged_set <- merged_set[!is.na(editors) & !is.na(broadband_population) & !is.na(mobile_population),]
   
-  merged_set <- merged_set[,j = {
+  pop_rank_set <- merged_set[,j = {
     to_return <- data.table(desktop_penetration = (sum(editors[user_type %in% c("mixed","desktop")])/broadband_population[1])*1000000,
                             mobile_penetration = (sum(editors[user_type %in% c("mixed","mobile")])/mobile_population[1])*1000000)
     to_return
   }, by = "country_iso"]
-  merged_set$desktop_penetration_rank <- rank(merged_set$desktop_penetration, na.last = "keep", ties.method = "min")
-  merged_set$mobile_penetration_rank <- rank(merged_set$mobile_penetration, na.last = "keep", ties.method = "min")
+  pop_rank_set$desktop_penetration_rank <- rank(pop_rank_set$desktop_penetration, na.last = "keep", ties.method = "min")
+  pop_rank_set$mobile_penetration_rank <- rank(pop_rank_set$mobile_penetration, na.last = "keep", ties.method = "min")
   ggsave(filename = file.path(getwd(),"Paper","Figures","editor_versus_penetration_ranking.svg"),
-         plot = ggplot(merged_set, aes(x = desktop_penetration_rank, y = mobile_penetration_rank, label = country_iso)) + 
+         plot = ggplot(pop_rank_set, aes(x = desktop_penetration_rank, y = mobile_penetration_rank, label = country_iso)) + 
            geom_text() + 
            geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
            theme_bw() +
            labs(title = "",
                 x = "Rank for desktop editors / fixed broadband connections",
                 y = "Rank for mobile editors / mobile subscribers"))
-  write.table(merged_set, file = file.path(getwd(),"Paper","Datasets","editors_and_penetration.tsv"), row.names = FALSE,
+  write.table(pop_rank_set, file = file.path(getwd(),"Paper","Datasets","editors_and_penetration.tsv"), row.names = FALSE,
               sep = "\t", quote = TRUE)
+  
+  editor_raw_rank <- merged_set[, j = list(mobile_editors = sum(editors[user_type %in% c("mobile","mixed")]),
+                                           desktop_editors = sum(editors[user_type %in% c("desktop","mixed")])),
+                                by = "country_iso"]
+  editor_raw_rank$desktop_rank <- rank(editor_raw_rank$desktop_editors, na.last = "keep", ties.method = "min")
+  editor_raw_rank$mobile_rank <- rank(editor_raw_rank$mobile_editors, na.last = "keep", ties.method = "min")
+  
+  ggsave(filename = file.path(getwd(),"Paper","Figures","editor_raw_ranking.svg"),
+         plot = ggplot(editor_raw_rank, aes(x = desktop_rank, y = mobile_rank, label = country_iso)) + 
+           geom_text() + 
+           geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
+           theme_bw() +
+           labs(title = "",
+                x = "Rank in desktop editors (raw)",
+                y = "Rank in mobile editors (raw)"))
+  write.table(editor_raw_rank[,c("country_iso","desktop_rank","mobile_rank"), with = FALSE], file = file.path(getwd(),"Paper","Datasets","editors_raw_rank.tsv"), row.names = FALSE,
+              sep = "\t", quote = TRUE)
+  
+  pop_set <- merged_set[,j = list(mobile_population = unique(mobile_population), desktop_population = unique(broadband_population)),
+                        by = "country_iso"]
+  pop_set$mobile_rank <- rank(pop_set$mobile_population, na.last = "keep", ties.method = "min")
+  pop_set$broadband_rank <- rank(pop_set$desktop_population, na.last = "keep", ties.method = "min")
+  ggsave(filename = file.path(getwd(),"Paper","Figures","population_raw_ranking.svg"),
+         plot = ggplot(pop_set, aes(x = broadband_rank, y = mobile_rank, label = country_iso)) + 
+           geom_text() + 
+           geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
+           theme_bw() +
+           labs(title = "",
+                x = "Rank in Fixed Broadband Subscribers (raw)",
+                y = "Rank in Mobile Subscribers (raw)"))
+  
+  pop_percentage_set <- merged_set[,j = list(mobile_proportion = unique(mobile_subscriptions),
+                                             broadband_population = unique(broadband_subscriptions)),
+                                   by = "country_iso"]
+  pop_percentage_set$mobile_percentage_rank <- rank(pop_percentage_set$mobile_proportion, na.last = "keep", ties.method = "min")
+  pop_percentage_set$broadband_percentage_rank <- rank(pop_percentage_set$broadband_population, na.last = "keep", ties.method = "min")
+  
+  ggsave(filename = file.path(getwd(),"Paper","Figures","population_percentage_ranking.svg"),
+         plot = ggplot(pop_set, aes(x = broadband_rank, y = mobile_rank, label = country_iso)) + 
+           geom_text() + 
+           geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
+           theme_bw() +
+           labs(title = "",
+                x = "Rank in Fixed Broadband Subscribers (%)",
+                y = "Rank in Mobile Subscribers (%)"))
 }
 
 
