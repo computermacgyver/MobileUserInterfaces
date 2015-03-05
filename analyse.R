@@ -89,19 +89,56 @@ session_distribution <- function(data){
     return(rbind(data.frame(type = "desktop", value = unlist(desk_set), stringsAsFactors = FALSE),
                  data.frame(type = "mobile", value = unlist(mob_set), stringsAsFactors = FALSE)))
   }
-
+  stat_fun <- function(data, indices){
+    data <- data[indices]
+    return(sum(data)/length(data))
+  }
   sess_dataset <- data[data$is_new == TRUE,]
   mobile_session_sample <- reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "mobile"],
                                                       sess_dataset$username[sess_dataset$type == "mobile"]))
   desktop_session_sample <- reconstruct_sessions(split(sess_dataset$timestamp[sess_dataset$type == "desktop"],
                                                        sess_dataset$username[sess_dataset$type == "desktop"]))
   
-  session_length <- metric_to_df(desk_set = session_length(desktop_session_sample),
-                                 mob_set = session_length(mobile_session_sample))
-  session_length <- session_length[session_length$value > -1,]
-  event_count <- metric_to_df(desk_set = session_events(desktop_session_sample),
-                              mob_set = session_events(mobile_session_sample))
-
+  session_length_mobile_results <- boot(data = unlist(session_length(mobile_session_sample)),
+                                        statistic = stat_fun,
+                                        R = 1000)$t
+  session_length_desktop_results <- boot(data = unlist(session_length(desktop_session_sample)),
+                                         statistic = stat_fun,
+                                         R = 1000)$t
+  results <- data.frame(session_length = c(session_length_mobile_results, session_length_desktop_results),
+                        type = c(rep("mobile",1000),rep("desktop",1000)),
+                        stringsAsFactors = FALSE)
+  
+  ggsave(filename = file.path(getwd(),"Paper","Figures","new_contributor_session_length.svg"),
+         plot = ggplot(results, aes(type, session_length)) + 
+           geom_boxplot() + 
+           theme_bw() +
+           labs(title = "",
+                x = "Contribution type",
+                y = "Average session length (seconds)"))
+  write.table(results, file = file.path(getwd(),"Paper","Datasets","new_contributor_session_length.tsv"),
+              quote = FALSE, sep = "\t", row.names = FALSE)
+  
+  session_edits_mobile_results <- boot(data = unlist(session_events(mobile_session_sample)),
+                                       statistic = stat_fun,
+                                       R = 1000)$t
+  session_edits_desktop_results <- boot(data = unlist(session_events(desktop_session_sample)),
+                                        statistic = stat_fun,
+                                        R = 1000)$t
+  results <- data.frame(session_events = c(session_edits_mobile_results, session_edits_desktop_results),
+                        type = c(rep("mobile",1000),rep("desktop",1000)),
+                        stringsAsFactors = FALSE)
+  
+  ggsave(filename = file.path(getwd(),"Paper","Figures","new_contributor_session_edits.svg"),
+         plot = ggplot(results, aes(type, session_events)) + 
+           geom_boxplot() + 
+           theme_bw() +
+           labs(title = "",
+                x = "Contribution type",
+                y = "Edits per session"))
+  write.table(results, file = file.path(getwd(),"Paper","Datasets","new_contributor_edits_per_session.tsv"),
+              quote = FALSE, sep = "\t", row.names = FALSE)
+  return(data)
 }
 
 #Having calculated /whether/ each edit was reverted with is_reverted,
@@ -127,26 +164,23 @@ revert_rate <- function(data){
   results <- data.frame(revert_rate = c(mobile_results, desktop_results),
                         type = c(rep("mobile",1000),rep("desktop",1000)),
                         stringsAsFactors = FALSE)
-  ggsave(filename = file.path(getwd(),"Paper","Figures","revert_rate.svg"),
+  ggsave(filename = file.path(getwd(),"Paper","Figures","new_contributor_revert_rate.svg"),
     plot = ggplot(results, aes(type, revert_rate)) + 
       geom_boxplot() + 
       scale_y_continuous(breaks = seq(0,0.1,0.01), limits = c(0,0.1), labels = percent) + 
       theme_bw() +
-      labs(title = "Revert rate of article contributions by new (<90 days since registration) contributors",
+      labs(title = "",
            x = "Contribution type",
            y = "Percentage of contributions reverted"))
   write.table(results, file = file.path(getwd(),"Paper","Datasets","revert_rate.tsv"),
               quote = FALSE, sep = "\t", row.names = FALSE)
-  print(permTS(results$revert_rate[results$type == "mobile"],
-         results$revert_rate[results$type == "desktop"],
-         "greater"))
-  return(data[,c("reverted","namespace") := NULL,])
+  return(data)
 }
 
-connection_type <- function(data){
-  
-}
-
+#Compares editors-by-country to World Bank data, gathered with
+#world_bank_retrieve.R's functions, about mobile and desktop
+#connection subscriptions in each country, both as a proportion
+#of the population and as a total count of subscriptions
 world_bank_ranking <- function(wiki_data, wb_data){
   wiki_data <- wiki_data[, j = list(editors = length(unique(username))), by = c("country_iso","user_type"),]
   merged_set <- merge(x = wb_data, y = wiki_data, all.x = TRUE, by = "country_iso")
@@ -219,11 +253,10 @@ world_bank_ranking <- function(wiki_data, wb_data){
 
 analyse <- function(data){
   wb_data <- world_bank_retrieve()
-  data <- %<>% circadian_variation() %>%
+  data <- circadian_variation() %>%
     geographic_distribution %>%
     session_distribution %>%
     revert_rate %>%
-    connection_type(wb_data) %>%
     world_bank_ranking(wb_data)
   
 }
