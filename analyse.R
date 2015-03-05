@@ -39,6 +39,11 @@ geographic_distribution <- function(data){
     suppressMessages({
     setnames(dt, 1:2, c("country","count"))
     cdm <- joinCountryData2Map(dt, joinCode="ISO2", nameJoinColumn="country", suggestForFailedCodes=TRUE)
+    missingCountries <- unique(cdm$ISO_A2[!(cdm$ISO_A2 %in% x$country)])
+    if(length(missingCountries) >= 1){
+      dt <- rbind(dt, data.frame(country=missingCountries, count=0))
+    }
+    cdm <- joinCountryData2Map(dt, joinCode="ISO2", nameJoinColumn="country", suggestForFailedCodes=TRUE)
     values <- as.data.frame(cdm[,c("count", "country")])
     names(values) <- c("count", "id")
     values <- unique(values)
