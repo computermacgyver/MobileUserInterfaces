@@ -146,19 +146,35 @@ world_bank_ranking <- function(wiki_data, wb_data){
   wiki_data <- wiki_data[, j = list(editors = length(unique(username))), by = c("country_iso","user_type"),]
   merged_set <- merge(x = wb_data, y = wiki_data, all.x = TRUE, by = "country_iso")
   merged_set <- merged_set[!is.na(editors) & !is.na(broadband_population) & !is.na(mobile_population),]
+  
   merged_set <- merged_set[,j = {
     to_return <- data.table(desktop_penetration = (sum(editors[user_type %in% c("mixed","desktop")])/broadband_population[1])*1000000,
                             mobile_penetration = (sum(editors[user_type %in% c("mixed","mobile")])/mobile_population[1])*1000000)
     to_return
   }, by = "country_iso"]
+  merged_set$desktop_penetration_rank <- rank(merged_set$desktop_penetration, na.last = "keep", ties.method = "min")
+  merged_set$mobile_penetration_rank <- rank(merged_set$mobile_penetration, na.last = "keep", ties.method = "min")
+  ggsave(filename = file.path(getwd(),"Paper","Figures","editor_versus_penetration_ranking.svg"),
+         plot = ggplot(merged_set, aes(x = desktop_penetration_rank, y = mobile_penetration_rank, label = country_iso)) + 
+           geom_text() + 
+           geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
+           theme_bw() +
+           labs(title = "",
+                x = "Rank for desktop editors / fixed broadband connections",
+                y = "Rank for mobile editors / mobile subscribers"))
+  write.table(merged_set, file = file.path(getwd(),"Paper","Datasets","editors_and_penetration.tsv"), row.names = FALSE,
+              sep = "\t", quote = TRUE)
 }
+
+
 analyse <- function(data){
+  wb_data <- world_bank_retrieve()
   data <- %<>% circadian_variation() %>%
     geographic_distribution %>%
     session_distribution %>%
     revert_rate %>%
-    connection_type
+    connection_type(wb_data) %>%
+    world_bank_ranking(wb_data)
   
-  #Ranking
-  world_bank_ranking(data, world_bank_retrieve())
 }
+
