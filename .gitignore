@@ -1,3 +1,10 @@
 .Rproj.user
 .Rhistory
 *.RData
+Paper/sigchi*
+*.log
+*.aux
+*.bbl
+*.blg
+*.pdf
+*.synctex*

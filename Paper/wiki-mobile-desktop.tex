@@ -87,28 +87,28 @@ breaklinks=true,
 
 % End of preamble. Here it comes the document.
 \begin{document}
-%\title{Big in Japan:\\Combating Systemic Bias Through Mobile Editing}
 \title{Mobile User Interfaces and\\User-Generated Content Platforms}
 
-%Commented out for review
-% \numberofauthors{2}
-% \author{
-%   \alignauthor Oliver Keyes\\
-%     \affaddr{Wikimedia Foundation}\\
-%     \affaddr{149 New Montgomery Street}\\
-%     \affaddr{San Francisco, CA, 94105}\\
-%     \email{okeyes@wikimedia.org}\\
-%   \alignauthor Scott A.~Hale\\
-%     \affaddr{Oxford Internet Institute}\\
-%     \affaddr{University of Oxford}\\
-%     \affaddr{1 St Giles, Oxford OX1 3JS}
-%     \email{scott.hale@oii.ox.ac.uk}\\
-% }
+Commented out for review
+\numberofauthors{2}
+\author{
+  \alignauthor Oliver Keyes\\
+    \affaddr{Wikimedia Foundation}\\
+    \affaddr{149 New Montgomery Street}\\
+    \affaddr{San Francisco, CA, 94105}\\
+    \email{okeyes@wikimedia.org}\\
+  \alignauthor Scott A.~Hale\\
+    \affaddr{Oxford Internet Institute}\\
+    \affaddr{University of Oxford}\\
+    \affaddr{1 St Giles, Oxford OX1 3JS}
+    \email{scott.hale@oii.ox.ac.uk}\\
+}
 
 \maketitle
 
 \begin{abstract}
-We study the role of mobile interfaces in driving contribution to user-generated content platforms. Using Wikipedia and Twitter, we find that mobile enables deeper engagement for existing users, with users contributing via mobile and desktop at different times of day. Despite the large growth of mobile phones in regions with fewer broadband users, we find that most mobile contributions come from users located in regions with large numbers of desktop contributions. We discuss design implications and suggest further research to elucidate the sociocultural factors beyond mobile penetration important for diversifying user-generated content platforms' userbases.
+We study the role of mobile interfaces in driving contribution to user-generated content platforms. Using Wikipedia and Twitter, we find that mobile enables deeper engagement for existing users, with users contributing via mobile and desktop at different times of day. Despite the large growth of mobile phones in regions with fewer broadband users, we find that most mobile contributions come from users located in regions with large numbers of desktop contributions. In addition, users contributing through the mobile version of Wikipedia
+are less productive and make edits of lower quality than their desktop counterparts. We discuss design implications and suggest further research to elucidate the sociocultural factors beyond mobile penetration important for diversifying user-generated content platforms' userbases.
 \end{abstract}
 
 \keywords{
@@ -170,17 +170,16 @@ We next describes the data captured from Wikipedia and Twitter, before turning t
 
 \section{Data}
 
-The Wikipedia data covers a period from 1 June to 5 September 2014. To avoid introducing geographic biases as a consequence of language biases, all language versions of Wikipedia and its sister sites (Wikisource, Wikidata, etc.) were used. To avoid biasing towards desktop, only edits from registered users were included as the mobile web interface requires users to have registered. Contributions from automated bots---identified via their registration as bots by the MediaWiki software that powers Wikimedia projects, or due to their user agents or user names matching known automated systems---were also excluded. Finally, edits to non-content namespaces were excluded so that only edits to actual articles are considered.
+The Wikipedia data covers a period from 1 June to 5 September 2014. To avoid introducing geographic biases as a consequence of language biases, all language versions of Wikipedia and its sister sites (Wikisource, Wikidata, etc.) were used. To avoid biasing towards desktop, only edits from registered users were included as the mobile web interface requires users to have registered. Contributions from automated bots---identified via their registration as bots by the MediaWiki software that powers Wikimedia projects, or due to their user agents or user names matching known automated systems---were also excluded. For the purpose of understanding circadian patterns, edits to non-content namespaces were excluded so that only edits to actual articles are considered.
 
-The IP addresses of editors were geolocated to place each editor within a country and timezone, and editors in unknown locations\slash{}timezones were discarded, leaving 10,810,345 edits from 310,563 distinct editors, covering 211 unique countries.
+The IP addresses of editors were geolocated to place each editor within a country and timezone, and editors in unknown locations\slash{}timezones were discarded, leaving 23,948,037 edits from 597,517 distinct editors, covering 228 unique countries.
 Users were assigned to the country from which the plurality of their contributions took place. Users without a single country providing a plurality of edits were excluded from the analysis of distinct editors.
 %TODO: We might but the number of editors excluded for this reason here (I've had a bad past experience)
 
 %should we I link through to the GeoIP software I used to extract values from IP addresses, along with the tzdata library?
 %Yeah, let's just footnote it --SAH
 
-To make the determination of whether an edit was \emph{mobile} or \emph{desktop}, we looked at the site through which the contribution was made, grouping mobile web and mobile app edits as mobile and all other contributions as desktop.
-%To determine whether a user was mobile,desktop or mixed, we examined the contributions each user made in the dataset and determined whether they had exclusively contributed via one pathway in the 90 day period (mobile or desktop) or from both (mixed).
+To make the determination of whether an edit was \emph{mobile} or \emph{desktop}, we looked at the site through which the contribution was made, grouping mobile web and mobile app edits as mobile and all other contributions as desktop. To determine whether a user was mobile,desktop or mixed, we examined the contributions each user made in the dataset and determined whether they had exclusively contributed via one pathway in the 90 day period (\emph{mobile} or \emph{desktop}) or from both (\emph{mixed}).
 MediaWiki, by default, stores timestamps in Coordinated Universal Time (UTC). By extracting the appropriate timezones for users' IP addresses, however, we were able to localize those timestamps, discovering how users edited relative to their timezones.%
 %TODO: Footnote the tzdata library here?
 
