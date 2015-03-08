@@ -3,7 +3,7 @@
 #has shown that this pattern varies depending on platform. If we can replicate that
 #it should go in.
 circadian_variation <- function(data){
-  dataset <- data[,j=list(edits = .N), by = c("type","hour")]
+  dataset <- data[data$namespace ==0 , j=list(edits = .N), by = c("type","hour")]
   dataset <- dataset[,j=list(edits = edits/sum(edits), hour = hour), by = "type"]
   ggsave(filename = file.path(getwd(),"Paper","Figures","circadian_variation.svg"),
          plot = ggplot(data = dataset, aes(hour, edits, color=as.factor(type))) +
@@ -15,7 +15,7 @@ circadian_variation <- function(data){
   write.table(dataset, file = file.path(getwd(),"Paper","Datasets","circadian_variation.tsv"),
               quote = FALSE, sep = "\t", row.names = FALSE)
   
-  dataset <- data[data$is_new == TRUE, j=list(edits = .N), by = c("type","hour")]
+  dataset <- data[data$namespace == 0 & data$is_new == TRUE, j=list(edits = .N), by = c("type","hour")]
   dataset <- dataset[,j=list(edits = edits/sum(edits), hour = hour), by = "type"]
   ggsave(filename = file.path(getwd(),"Paper","Figures","new_user_circadian_variation.svg"),
          plot = ggplot(data = dataset, aes(hour, edits, color=as.factor(type))) +
