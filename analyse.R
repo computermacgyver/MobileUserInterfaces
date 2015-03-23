@@ -241,7 +241,7 @@ world_bank_ranking <- function(wiki_data, wb_data){
   pop_percentage_set$broadband_percentage_rank <- rank(pop_percentage_set$broadband_population, na.last = "keep", ties.method = "min")
   
   ggsave(filename = file.path(getwd(),"Paper","Figures","population_percentage_ranking.svg"),
-         plot = ggplot(pop_set, aes(x = broadband_rank, y = mobile_rank, label = country_iso)) + 
+         plot = ggplot(pop_percentage_set, aes(x = broadband_rank, y = mobile_rank, label = country_iso)) + 
            geom_text() + 
            geom_abline(intercept = 0, slope = 1, linetype = "dashed") + 
            theme_bw() +
